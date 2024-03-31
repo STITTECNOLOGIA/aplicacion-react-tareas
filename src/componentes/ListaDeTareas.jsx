@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TareaFormulario from "./TareaFormulario";
 import "../stylesheet/ListaDeTareas.css";
 import Tarea from "./Tarea";
 
 function ListaDeTareas() {
-  const [tareas, setTareas] = useState([]);
+  // Cargar las tareas desde localStorage al iniciar el componente
+  const [tareas, setTareas] = useState(
+    JSON.parse(localStorage.getItem("tareas")) || []
+  );
+
+  //Actualizar localStorage cada vez que se modifique el estado de las tareas
+  useEffect(() => {
+    localStorage.setItem("tareas", JSON.stringify(tareas));
+  }, [tareas]);
 
   const agregarTarea = (tarea) => {
     if (tarea.texto.trim()) {
@@ -38,7 +46,7 @@ function ListaDeTareas() {
             key={tarea.id}
             id={tarea.id}
             texto={tarea.texto}
-            completado={tarea.completado}
+            completada={tarea.completada}
             completarTarea={completarTarea}
             eliminarTarea={eliminarTarea}
           />
